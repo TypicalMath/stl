@@ -109,6 +109,10 @@ Notation "∇o D" := (option_map Nabl D) (no associativity, at level 60).
 Notation "n ^∇l G" := (map (nabla n) G) (no associativity, at level 60).
 Notation "n ^∇o D" := (option_map (nabla n) D) (no associativity, at level 60).
 
+Definition context : Type := list form.
+
+Definition subsingleton : Type := option form.
+
 Lemma nabla_Sn : forall a n, (S n)^∇ a = n^∇ (∇ a).
 Proof. induction n. reflexivity. simpl in *. rewrite <- IHn. reflexivity. Qed.
 
@@ -130,8 +134,8 @@ Lemma nabla_Nabl_option : forall D n, S n ^∇o D = ∇o (n ^∇o D).
 Proof. induction D; simpl; try reflexivity. Qed.
 
 Inductive sequent : Type :=
-| Seq : list form -> option form -> sequent.
+| Seq : context -> subsingleton -> sequent.
 
-Definition replace_form (l : list form) (a : form) (b : form) : list form := a :: (remove formeq_dec b l).
+Definition replace_form (l : context) (a : form) (b : form) : list form := a :: (remove formeq_dec b l).
 
 Notation "l '[[' b '::=' a ']]'" := (replace_form l a b) (at level 100).
