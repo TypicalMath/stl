@@ -41,7 +41,7 @@ Proof.
     - destruct (IHp q); subst;
       try (right; intros H; inversion H; contradiction n);
       left; reflexivity.
-Qed.
+Defined.
 
 Fixpoint formeq (p q : form) : bool :=
   match (p, q) with
@@ -54,6 +54,35 @@ Fixpoint formeq (p q : form) : bool :=
   | (p1 ⊃ p2, q1 ⊃ q2) => (formeq p1 q1) && (formeq p2 q2)
   | _ => false
   end.
+
+Lemma formeq_sound : forall p q : form, formeq p q = true -> p = q.
+Proof.
+  induction p; induction q;
+    intros E; simpl in E;
+    inversion E;
+    f_equal;
+    try (
+      destruct (andb_prop _ _ E) as [E1 E2];
+      try apply (IHp1 q1 E1);
+      try apply (IHp2 q2 E2)
+    );
+    try reflexivity.
+    - apply Nat.eqb_eq. apply E.
+    - apply (IHp q E).
+Qed.
+
+Lemma formeq_refl : forall p : form, formeq p p = true.
+Proof.
+  intros p. induction p; simpl;
+    try apply andb_true_intro; try split;
+    try apply IHp;
+    try apply IHp1;
+    try apply IHp2.
+  apply Nat.eqb_refl.
+Qed.
+
+Lemma formeq_complete : forall p q : form, p = q -> formeq p q = true.
+Proof. intros p q E. rewrite E. apply formeq_refl. Qed. 
 
 Fixpoint rank (p : form) : nat :=
   match p with
