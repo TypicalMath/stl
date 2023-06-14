@@ -131,3 +131,7 @@ Proof. induction D; simpl; try reflexivity. Qed.
 
 Inductive sequent : Type :=
 | Seq : list form -> option form -> sequent.
+
+Definition replace_form (l : list form) (a : form) (b : form) : list form := a :: (remove formeq_dec b l).
+
+Notation "l '[[' b '::=' a ']]'" := (replace_form l a b) (at level 100).
