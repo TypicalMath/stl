@@ -99,3 +99,6 @@ Qed.
 
 Lemma nabla_Nabl_option : forall D n, S n ^∇o D = ∇o (n ^∇o D).
 Proof. induction D; simpl; try reflexivity. Qed.
+
+Inductive sequent : Type :=
+| Seq : list form -> option form -> sequent.
