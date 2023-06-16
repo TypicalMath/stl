@@ -142,3 +142,6 @@ Inductive sequent : Type :=
 Definition replace_form (l : context) (a : form) (b : form) : list form := a :: (remove formeq_dec b l).
 
 Notation "l '[[' b '::=' a ']]'" := (replace_form l a b) (at level 100).
+
+Coercion form_to_some (P : form) : (option form) := Some P.
+Coercion list_to_form (P : form) : (list form) := [P].

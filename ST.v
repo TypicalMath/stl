@@ -1,8 +1,6 @@
 Require Import List.
 Require Import lang.
 Import List.ListNotations.
-Coercion form_to_some (P : form) : (option form) := Some P.
-Coercion list_to_form (P : form) : (list form) := [P].
 
 Reserved Notation "G ⇒ D" (no associativity, at level 61). (* 21d2 *)
 
