@@ -73,4 +73,46 @@ Proof.
     - apply PTEx. apply IHST3.
 Defined.
 
-Coercion ST3_ST3p : ST3 >-> ST3p. 
+Coercion ST3_ST3p : ST3 >-> ST3p.
+
+
+Tactic Notation "swap_hd" := apply (TEx [] _ _ _ _); simpl.
+
+Theorem ST3_Id: forall (a : form) (G : context), exists n, a::G ⇒3 a ⨡ n.
+Proof.
+  intros a.
+  induction a; intros G.
+    - exists 0. apply TId.
+    - exists 0. apply TLF.
+    - exists 0. apply TRT.
+    - assert (this: ∇ a :: G = [∇ a] ++ G).
+        { reflexivity. }
+      rewrite this.
+      destruct (IHa []) as [n IHan]. exists (2 + n).
+      apply TLw.
+      rewrite nabla_singleton.
+      apply TN.
+      apply IHan.
+    - destruct (IHa1 G) as [n IHa1n].
+      destruct (IHa2 G) as [m IHa2m].
+      exists (S (max (S n) (S m))).
+      apply TLo.
+        + apply TRo1. apply IHa1n.
+        + apply TRo2. apply IHa2m.
+    - destruct (IHa1 (a2::G)) as [n IHa1n].
+      destruct (IHa2 (a1::G)) as [m IHa2m].
+      exists (S (S (max n (S m)))).
+      apply TLa. apply TRa.
+        + apply IHa1n.
+        + swap_hd. apply IHa2m.
+    - destruct (IHa1 (∇ (a1 ⊃ a2) :: ∇l G)) as [n IHa1n].
+      destruct (IHa2 (∇ (a1 ⊃ a2) :: a1 :: ∇l G)) as [m IHa2m].
+      exists (S (S (S (max (S n) (S m))))).
+      apply TRi. simpl "∇l".
+      remember (max (S n) (S m)) as q.
+      swap_hd.
+      rewrite Heqq.
+      apply TLi.
+        + swap_hd. apply IHa1n.
+        + swap_hd. apply IHa2m.
+Qed.
