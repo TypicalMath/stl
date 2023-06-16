@@ -124,6 +124,9 @@ Lemma nabla_n_singleton : forall a n, [n^∇ a] = n^∇l [a]. Proof. reflexivity
 
 Lemma nabla_n_some : forall a n, Some (n^∇ a) = n^∇o (Some a). Proof. reflexivity. Qed.
 
+Lemma nabla_Nabl : forall a n, S n ^∇ a = ∇ (n ^∇ a).
+Proof. reflexivity. Qed.
+
 Lemma nabla_Nabl_list : forall G n, S n ^∇l G = ∇l (n ^∇l G).
 Proof.
   induction G; simpl; try reflexivity.
